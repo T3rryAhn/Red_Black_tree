@@ -2,19 +2,15 @@
 
 #include <stdlib.h>
 
+static const node_t NIL_NODE = { RBTREE_BLACK, -1, NULL, NULL, NULL};
+static node_t *const NILL = &NIL_NODE;
+
 rbtree *new_rbtree(void) {
     rbtree *p = (rbtree *) calloc(1, sizeof(rbtree));
+    if (!p) { return NULL; }
 
-    // 닐 노드 생성. 닐 노드를 가르키는 포인터 NILL 은 변경 불가능한 상수.
-    node_t * const NILL = calloc(1, sizeof(node_t));
-    NILL->color = RBTREE_BLACK;
-    NILL->key = -1;
-    NILL->left = NILL;
-    NILL->right = NILL;
-    NILL->parent = NILL;
-
+    // 모든 트리는 같은 NILL 노드를 공유.
     p->nil = NILL;
-    p->nil->color = RBTREE_BLACK;
     p->root = NILL;
 
     return p;
@@ -30,9 +26,9 @@ node_t *create_node(const key_t key) {
     node_t *temp_node = malloc(sizeof(node_t));
     temp_node->color = RBTREE_RED;
     temp_node->key = key;
-    temp_node->parent
-    temp_node->left = ;
-    temp_node->right
+    temp_node->parent = NILL;
+    temp_node->right = NILL;
+
 }
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
