@@ -1,8 +1,9 @@
 #include <assert.h>
-#include <rbtree.h>
+//#include <rbtree.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../src/rbtree.h"
 
 // new_rbtree should return rbtree struct with null root node
 void test_init(void) {

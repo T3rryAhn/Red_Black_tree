@@ -27,16 +27,19 @@ node_t *create_node(const key_t key) {
     temp_node->color = RBTREE_RED;
     temp_node->key = key;
     temp_node->parent = NILL;
+    temp_node->left = NILL;
     temp_node->right = NILL;
 
+    return temp_node;
 }
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
     // TODO: implement insert
     node_t *node = t->root;
-    if (node == t->nil) {
-
+    if (node == NILL) {
+        t->root = create_node(key);
     }
+
 
     return t->root;
 }
