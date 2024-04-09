@@ -140,7 +140,7 @@ void test_to_array(rbtree *t, const key_t *arr, const size_t n) {
   for (int i = 0; i < n; i++) {
     assert(arr[i] == res[i]);
   }
-  free(res);
+  free(res);     
 }
 
 void test_multi_instance() {
@@ -315,14 +315,14 @@ void test_to_array_suite() {
 void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_insert(t, arr[i]);
-    printf("%d 노드 삽입 주소 %p\n", p->key, p);
+    // printf("%d 노드 삽입 주소 %p\n", p->key, p);
     assert(p != NULL);
   }
 
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_find(t, arr[i]);
-     printf("arr[%d] = %d\n", i, arr[i]);
-     printf("node: %d, parent: %d, left: %d, right: %d\n", p->key, p->parent->key, p->left->key, p->right->key);
+    //  printf("arr[%d] = %d\n", i, arr[i]);
+    //  printf("node: %d, parent: %d, left: %d, right: %d\n", p->key, p->parent->key, p->left->key, p->right->key);
     assert(p != NULL);
     assert(p->key == arr[i]);
     rbtree_erase(t, p);
