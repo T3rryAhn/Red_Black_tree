@@ -46,7 +46,7 @@ void rbtree_left_rotate(rbtree *t, node_t *target_node) {
     target_node_rChild->parent = target_node->parent;
     if (target_node->parent == NIL) {
         t->root = target_node_rChild;
-    } else if (target_node == target_node->left) {
+    } else if (target_node == target_node->parent->left) {
         target_node->parent->left = target_node_rChild;
     } else {
         target_node->parent->right = target_node_rChild;
@@ -62,23 +62,73 @@ void rbtree_right_rotate(rbtree *t, node_t *target_node) {
     if (target_node_lChild->right != NIL) {
         target_node_lChild->right->parent = target_node;
     }
+    target_node_lChild->parent = target_node->parent;
     if (target_node->parent == NIL) {
         t->root = target_node_lChild;
-    } else if (target_node == target_node->parent->left) {
-        target_node->parent->left = target_node_lChild;
-    } else {
+    } else if (target_node == target_node->parent->right) {
         target_node->parent->right = target_node_lChild;
+    } else {
+        target_node->parent->left = target_node_lChild;
     }
 
     target_node_lChild->right = target_node;
     target_node->parent = target_node_lChild;
 }
 
-void rbtree_insert_fixup(rbtree *t, node_t *target_node) {
+//void rbtree_insert_fixup(rbtree *t, node_t *current) {
+//    while (current != t->root && current->parent->color == RBTREE_RED) {
+//        node_t *parent = current->parent;
+//        node_t *grandparent = parent->parent;
+//
+//        if (parent == grandparent->left) { // 부모가 조부모의 왼쪽 자식인 경우
+//            node_t *uncle = grandparent->right;
+//
+//            if (uncle != NIL && uncle->color == RBTREE_RED) { // 삼촌이 레드인 경우
+//                parent->color = RBTREE_BLACK;
+//                uncle->color = RBTREE_BLACK;
+//                grandparent->color = RBTREE_RED;
+//                current = grandparent;
+//            } else {
+//                if (current == parent->right) {
+//                    rbtree_left_rotate(t, parent);
+//                    current = parent;
+//                    parent = current->parent;
+//                }
+//
+//                parent->color = RBTREE_BLACK;
+//                grandparent->color = RBTREE_RED;
+//                rbtree_right_rotate(t, grandparent);
+//            }
+//        } else { // 부모가 조부모의 오른쪽 자식인 경우
+//            node_t *uncle = grandparent->left;
+//
+//            if (uncle != NIL && uncle->color == RBTREE_RED) { // 삼촌이 레드인 경우
+//                parent->color = RBTREE_BLACK;
+//                uncle->color = RBTREE_BLACK;
+//                grandparent->color = RBTREE_RED;
+//                current = grandparent;
+//            } else {
+//                if (current == parent->left) {
+//                    rbtree_right_rotate(t, parent);
+//                    current = parent;
+//                    parent = current->parent;
+//                }
+//
+//                parent->color = RBTREE_BLACK;
+//                grandparent->color = RBTREE_RED;
+//                rbtree_left_rotate(t, grandparent);
+//            }
+//        }
+//    }
+//
+//    t->root->color = RBTREE_BLACK; // 루트는 항상 블랙
+//}
 
+void rbtree_insert_fixup(rbtree *t, node_t *target_node) {
     node_t *target_parent = target_node->parent;
     node_t *target_grand_parent = target_parent->parent;
-    while (target_parent->color == RBTREE_RED) {
+
+    while (target_node != t->root && target_parent->color == RBTREE_RED) {
         if (target_parent == target_grand_parent->left) {
             node_t *uncle = target_grand_parent->right;
             if (uncle->color == RBTREE_RED) {
@@ -109,6 +159,7 @@ void rbtree_insert_fixup(rbtree *t, node_t *target_node) {
     }
     t->root->color = RBTREE_BLACK;
 }
+
 
 node_t *create_node(const key_t key) {
     node_t *tempNode = malloc(sizeof(node_t));
